@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ntconsult
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ntconsult
+  template:
+    metadata:
+      labels:
+        app: ntconsult
+    spec:
+      containers:
+      - name: ntconsult
+        image: public.ecr.aws/o3l9l9y9/ntconsult:latest
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: 500m
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/
+            port: 8080
+          timeoutSeconds: 10
+          initialDelaySeconds: 100
+          periodSeconds: 100
